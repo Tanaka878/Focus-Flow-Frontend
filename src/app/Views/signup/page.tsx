@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, AlertCircle, User, Briefcase, CheckCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import BASE_URL from "@/app/utils/api";
 
 const SignUp: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -59,7 +60,7 @@ const SignUp: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
@@ -78,15 +79,34 @@ const SignUp: React.FC = () => {
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
+    // API call
+    try {
+      const response = await fetch(`${BASE_URL}/user/create-account`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, password, profession })
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.message || "Failed to create account.");
+        setIsLoading(false);
+        return;
+      }
+
+      // On success, redirect to login or dashboard
+      router.push("/Views/login");
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
       setIsLoading(false);
-      alert(`Account created successfully for ${name}!`);
-    }, 2000);
+    }
+    setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4 relative overflow-hidden text-black">
       {/* Animated Background Elements */}
       <div className="absolute top-10 left-10 w-40 h-40 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
       <div className="absolute top-60 right-10 w-32 h-32 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>

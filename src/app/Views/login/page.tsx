@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import LoginDTO from "../../Interfaces/LoginDTO";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Login: React.FC<LoginDTO> = () => {
   const [email, setEmail] = useState("");
@@ -24,6 +25,10 @@ const Login: React.FC<LoginDTO> = () => {
     }
 
     // Simulate API call
+    
+
+
+
    
   };
 
@@ -39,11 +44,17 @@ const Login: React.FC<LoginDTO> = () => {
         <div className="backdrop-blur-lg bg-white/90 border border-white/20 rounded-3xl shadow-2xl p-8 transform transition-all duration-300 hover:shadow-3xl">
           {/* Header Section */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-lg transform transition-transform hover:scale-110">
-              <Lock className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center justify-center w-16 h-16 ">
+              <Image
+                src={"/Image/focus-flow.png"}
+                alt={""}
+                width={250}
+                height={300}
+                className="rounded-full object-cover"
+              />
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
-              Welcome Back
+            <h1 className="text-6xl md:text-2xl font-black bg-gradient-to-r from-purple-400 via-pink-500 via-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-600 bg-clip-text text-transparent mb-2 animate-pulse hover:animate-bounce transition-all duration-300 drop-shadow-2xl hover:drop-shadow-[0_0_30px_rgba(168,85,247,0.8)] cursor-pointer select-none tracking-tight leading-none transform hover:scale-105">
+              Focus Flow
             </h1>
             <p className="text-gray-500 text-sm">Sign in to your account to continue</p>
           </div>
