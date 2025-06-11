@@ -23,7 +23,7 @@ const SignUp: React.FC = () => {
     "Data Scientist",
     "Product Manager",
     "Marketing Specialist",
-    "Business Analyst",
+    "Business Analysts",
     "Entrepreneur",
     "Consultant",
     "Teacher/Professor",
