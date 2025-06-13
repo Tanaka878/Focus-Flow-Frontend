@@ -1,11 +1,10 @@
 'use client';
 import React, { useState } from "react";
-import LoginDTO from "../../Interfaces/LoginDTO";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-const Login: React.FC<LoginDTO> = () => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

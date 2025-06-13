@@ -99,6 +99,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       // On success, redirect to login or dashboard
       router.push("/Views/login");
     } catch (err) {
+      console.error("Error creating account:", err);
       setError("Something went wrong. Please try again.");
       setIsLoading(false);
     }
