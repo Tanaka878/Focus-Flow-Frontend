@@ -1,8 +1,10 @@
 import { Plus, Home, Settings } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
+import NavBarProps from "../Interfaces/NavBarProps";
 
 
-const Navbar = () => {
+
+const Navbar: React.FC<NavBarProps> = ({onSelectPage}) => {
   const [activeTab, setActiveTab] = useState('home');
 
   const navItems = [
@@ -10,6 +12,13 @@ const Navbar = () => {
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'settings', icon: Settings, label: 'Settings' }
   ];
+
+  function handleClick(id: string, label: string){
+    console.log(id)
+    setActiveTab(id)
+    onSelectPage(label)
+
+  }
 
   return (
     <nav className="sticky bottom-0 left-0 w-full h-16 bg-gray-900 border-t border-gray-700 z-50 mt-auto">
@@ -21,7 +30,8 @@ const Navbar = () => {
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+             onClick={()=> handleClick(item.id, item.label)}
+              
               className={`
                 flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200
                 ${isActive 
