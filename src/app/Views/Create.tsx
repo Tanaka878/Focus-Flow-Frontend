@@ -222,8 +222,7 @@ const Create = () => {
 
         {/* Progress Steps */}
         <div className="flex justify-center mb-8">
-          <div className="flex items-center space-x-4 overflow-x-auto">
-            {steps.map((step, index) => {
+              <div className="flex items-center gap-2 md:gap-4 overflow-x-auto py-2 px-1 -mx-1">            {steps.map((step, index) => {
               const Icon = step.icon;
               return (
                 <div key={step.id} className="flex items-center">
