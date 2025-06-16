@@ -403,103 +403,142 @@ const Create = () => {
 
           {/* Step 3: Team & Tags */}
           {currentStep === 3 && (
-            <div className="space-y-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Team & Tags</h2>
-              
-              {/* Team Members */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">Team Members</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <input
-                    type="text"
-                    value={newMember.name}
-                    onChange={(e) => setNewMember({...newMember, name: e.target.value})}
-                    placeholder="Member name"
-                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={newMember.role}
-                      onChange={(e) => setNewMember({...newMember, role: e.target.value})}
-                      placeholder="Role"
-                      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <button
-                      type="button"
-                      onClick={addMember}
-                      className="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                    >
-                      <Plus size={20} />
-                    </button>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  {formData.members.map((member) => (
-                    <div key={member.memberId} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div>
-                        <span className="font-medium">{member.name}</span>
-                        <span className="text-gray-500 ml-2">• {member.role}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => member.memberId && removeMember(member.memberId)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X size={18} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+<div className="space-y-6 sm:space-y-8">
+  <div className="px-2 sm:px-0">
+    <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 sm:mb-6">
+      Team &amp; Tags
+    </h2>
+  </div>
 
-              {/* Project Tags */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">Project Tags</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <input
-                    type="text"
-                    value={newTag.key}
-                    onChange={(e) => setNewTag({...newTag, key: e.target.value})}
-                    placeholder="Tag key (e.g., priority)"
-                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={newTag.value}
-                      onChange={(e) => setNewTag({...newTag, value: e.target.value})}
-                      placeholder="Tag value (e.g., high)"
-                      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <button
-                      type="button"
-                      onClick={addTag}
-                      className="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                    >
-                      <Plus size={20} />
-                    </button>
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {Object.entries(formData.projectTags).map(([key, value]) => (
-                    <div key={key} className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-                      <Tag size={16} className="mr-1" />
-                      <span className="text-sm">{key}: {value}</span>
-                      <button
-                        type="button"
-                        onClick={() => removeTag(key)}
-                        className="ml-2 text-blue-600 hover:text-blue-800"
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+  {/* Team Members */}
+  <div className="px-2 sm:px-0">
+    <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-3 sm:mb-4">
+      Team Members
+    </h3>
+    {/* Add Member Form */}
+    <div className="flex flex-col gap-y-3 sm:grid sm:grid-cols-1 md:grid-cols-2 sm:gap-4 mb-4">
+      <input
+        type="text"
+        value={newMember.name}
+        onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
+        placeholder="Member name"
+        className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+      />
+      <div className="flex flex-col sm:flex-row gap-2 w-full">
+        <input
+          type="text"
+          value={newMember.role}
+          onChange={(e) => setNewMember({ ...newMember, role: e.target.value })}
+          placeholder="Role"
+          className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+        />
+        <button
+          type="button"
+          onClick={addMember}
+          className="w-full sm:w-auto px-3 py-2.5 sm:px-4 sm:py-3 bg-blue-500 text-white rounded-md sm:rounded-lg hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md"
+        >
+          <Plus size={18} className="sm:w-5 sm:h-5 mx-auto" />
+        </button>
+      </div>
+    </div>
+    {/* Members List */}
+    <div className="space-y-2 max-h-64 overflow-y-auto">
+      {formData.members.map((member) => (
+        <div
+          key={member.memberId}
+          className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-md sm:rounded-lg hover:bg-gray-100 transition-colors duration-200"
+        >
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <span className="font-medium text-sm sm:text-base text-gray-900 truncate">
+                {member.name}
+              </span>
+              <span className="text-xs sm:text-sm text-gray-500 sm:ml-2 mt-0.5 sm:mt-0">
+                <span className="hidden sm:inline">• </span>
+                {member.role}
+              </span>
             </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => member.memberId && removeMember(member.memberId)}
+            className="ml-2 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-all duration-200 flex-shrink-0"
+          >
+            <X size={16} className="sm:w-4 sm:h-4" />
+          </button>
+        </div>
+      ))}
+      {formData.members.length === 0 && (
+        <div className="text-center py-8 text-gray-500 text-sm">
+          No team members added yet
+        </div>
+      )}
+    </div>
+  </div>
+
+  {/* Project Tags */}
+  <div className="px-2 sm:px-0">
+    <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-3 sm:mb-4">
+      Project Tags
+    </h3>
+    {/* Add Tag Form */}
+    <div className="flex flex-col gap-y-3 sm:grid sm:grid-cols-1 md:grid-cols-2 sm:gap-4 mb-4">
+      <input
+        type="text"
+        value={newTag.key}
+        onChange={(e) => setNewTag({ ...newTag, key: e.target.value })}
+        placeholder="Tag key (e.g., priority)"
+        className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+      />
+      <div className="flex flex-col sm:flex-row gap-2 w-full">
+        <input
+          type="text"
+          value={newTag.value}
+          onChange={(e) => setNewTag({ ...newTag, value: e.target.value })}
+          placeholder="Tag value (e.g., high)"
+          className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+        />
+        <button
+          type="button"
+          onClick={addTag}
+          className="w-full sm:w-auto px-3 py-2.5 sm:px-4 sm:py-3 bg-blue-500 text-white rounded-md sm:rounded-lg hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md"
+        >
+          <Plus size={18} className="sm:w-5 sm:h-5 mx-auto" />
+        </button>
+      </div>
+    </div>
+    {/* Tags Display */}
+    <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
+      {Object.entries(formData.projectTags).map(([key, value]) => (
+        <div
+          key={key}
+          className="flex items-center bg-blue-100 text-blue-800 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm font-medium shadow-sm hover:shadow-md transition-all duration-200"
+        >
+          <Tag size={14} className="mr-1 sm:mr-1.5 flex-shrink-0" />
+          <span className="truncate max-w-32 sm:max-w-none">
+            {key}: {value}
+          </span>
+          <button
+            type="button"
+            onClick={() => removeTag(key)}
+            className="ml-1.5 sm:ml-2 p-0.5 text-blue-600 hover:text-blue-800 hover:bg-blue-200 rounded-full transition-all duration-200 flex-shrink-0"
+          >
+            <X size={12} className="sm:w-3 sm:h-3" />
+          </button>
+        </div>
+      ))}
+      {Object.keys(formData.projectTags).length === 0 && (
+        <div className="text-center py-8 text-gray-500 text-sm w-full">
+          No tags added yet
+        </div>
+      )}
+    </div>
+  </div>
+</div>
           )}
 
+
+          
           {/* Step 4: Tasks */}
           {currentStep === 4 && (
             <div className="space-y-8">
@@ -697,10 +736,10 @@ const Create = () => {
                 Next
               </button>
             ) : (
-              <button
+                          <button
                 type="submit"
                 onClick={handleSubmit}
-                className="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-semibold"
+                className="px-4 py-2 sm:px-6 sm:py-2.5 bg-green-500 text-white rounded-md sm:rounded-lg hover:bg-green-600 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 font-medium text-sm sm:text-base shadow-sm hover:shadow-md transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 Create Project
               </button>
