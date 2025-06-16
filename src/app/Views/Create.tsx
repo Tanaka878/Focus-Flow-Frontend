@@ -267,7 +267,7 @@ const Create = () => {
                     type="text"
                     value={formData.projectName}
                     onChange={(e) => handleInputChange('projectName', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     placeholder="Enter project name (3-100 characters)"
                     required
                     minLength={3}
@@ -283,7 +283,7 @@ const Create = () => {
                     value={formData.projectDescription}
                     onChange={(e) => handleInputChange('projectDescription', e.target.value)}
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     placeholder="Describe your project (max 500 characters)"
                     required
                     maxLength={500}
@@ -301,7 +301,7 @@ const Create = () => {
                     type="text"
                     value={formData.author}
                     onChange={(e) => handleInputChange('author', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter author name"
                     required
                   />
@@ -314,7 +314,7 @@ const Create = () => {
                   <select
                     value={formData.projectType}
                     onChange={(e) => handleInputChange('projectType', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="PERSONAL">Personal</option>
                     <option value="TEAM">Team</option>
@@ -331,7 +331,7 @@ const Create = () => {
                   <select
                     value={formData.projectStatus}
                     onChange={(e) => handleInputChange('projectStatus', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                   >
                     <option value="ACTIVE">Active</option>
                     <option value="ON_HOLD">On Hold</option>
