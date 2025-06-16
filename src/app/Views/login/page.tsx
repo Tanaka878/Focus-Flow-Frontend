@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
+import BASE_URL from "@/app/utils/api";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -24,9 +25,35 @@ const Login: React.FC = () => {
     }
 
     // Simulate API call
-    
 
+    try {
+      const response = await fetch(`${BASE_URL}/user/auth/authenticate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({email, password })
+      });
 
+      if (!response.ok) {
+        setError( "Failed to create account.");
+        setIsLoading(false);
+        return;
+      }
+
+      // On success, redirect to login or dashboard
+      router.push("/app/Views/Layout");
+
+      const data = await response.json();
+
+      localStorage.setItem("token", data)
+
+    } catch (err) {
+      console.error("Error creating account:", err);
+      setError("Something went wrong. Please try again.");
+      setIsLoading(false);
+    }
+    setIsLoading(false);
 
    
   };
