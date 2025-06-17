@@ -27,7 +27,7 @@ const Login: React.FC = () => {
     // Simulate API call
 
     try {
-      const response = await fetch(`${BASE_URL}/user/auth/authenticate`, {
+      const response = await fetch(`${BASE_URL}/user/authenticate/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -36,13 +36,13 @@ const Login: React.FC = () => {
       });
 
       if (!response.ok) {
-        setError( "Failed to create account.");
+        setError( "Failed to login.");
         setIsLoading(false);
         return;
       }
 
       // On success, redirect to login or dashboard
-      router.push("/app/Views/Layout");
+      router.push("/Views/Layout");
 
       const data = await response.json();
 
@@ -92,7 +92,7 @@ const Login: React.FC = () => {
                 <Mail className="w-4 h-4" />
                 Email Address
               </label>
-              <div className="relative">
+              <div className="relative text-black">
                 <input
                   id="email"
                   type="email"
@@ -112,7 +112,7 @@ const Login: React.FC = () => {
                 <Lock className="w-4 h-4" />
                 Password
               </label>
-              <div className="relative">
+              <div className="relative text-black">
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
