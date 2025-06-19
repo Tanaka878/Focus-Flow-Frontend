@@ -1,11 +1,13 @@
 import { Bell, User, Settings, LogOut, Check, Clock, Star, MessageCircle, Calendar, Shield } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 const TopNavbar = () => {
   const [isNotificationTabOpen, setIsNotificationTabOpen] = useState(false);
   const [isProfileTabOpen, setIsProfileTabOpen] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Sample notifications data
   const notifications = [
@@ -88,9 +90,14 @@ const TopNavbar = () => {
   }
 
   function handleProfileMenuClick(action: string) {
-    console.log(`Profile action: ${action}`);
     setIsProfileTabOpen(false);
-    // Handle different actions here
+    if (action === 'logout') {
+      // Optionally clear auth data here
+      router.push('/Views/login');
+      return;
+    }
+    // Handle other actions here
+    console.log(`Profile action: ${action}`);
   }
 
   function markAsRead(notificationId: number) {
