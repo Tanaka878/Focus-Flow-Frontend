@@ -46,7 +46,7 @@ const Login: React.FC = () => {
 
       if (data && data.token) {
         localStorage.setItem("token", data.token);
-        const dashboardUrl = encodeURIComponent("/Views/Layout");
+        const dashboardUrl = "/Views/Layout";
         router.push(dashboardUrl);
       } else {
         setError("Invalid response from server.");
