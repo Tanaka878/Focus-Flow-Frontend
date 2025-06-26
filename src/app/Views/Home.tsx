@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Play, FileText, Calendar, Clock, Target, Zap, Trophy, CheckCircle2, Timer, TrendingUp, Star } from 'lucide-react';
+import { Calendar, Clock, Target, Zap, Trophy, CheckCircle2, Timer, TrendingUp, Star } from 'lucide-react';
 
 const Home = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -50,12 +50,14 @@ const Home = () => {
     { event: 'Team retrospective', time: '4:30 PM', status: 'upcoming' }
   ];
 
-  const quickActions = [
+  /* const quickActions = [
     { label: 'Add Task', icon: Plus, color: 'bg-gradient-to-r from-blue-500 to-blue-600', hoverColor: 'hover:from-blue-600 hover:to-blue-700' },
     { label: 'Start Timer', icon: Play, color: 'bg-gradient-to-r from-green-500 to-green-600', hoverColor: 'hover:from-green-600 hover:to-green-700' },
     { label: 'New Note', icon: FileText, color: 'bg-gradient-to-r from-purple-500 to-purple-600', hoverColor: 'hover:from-purple-600 hover:to-purple-700' },
     { label: 'Schedule', icon: Calendar, color: 'bg-gradient-to-r from-orange-500 to-orange-600', hoverColor: 'hover:from-orange-600 hover:to-orange-700' }
-  ];
+  ]; */
+
+  
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -159,7 +161,7 @@ const Home = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="space-y-6">
+         {/*  <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <Zap className="w-6 h-6 text-purple-600" />
@@ -176,7 +178,7 @@ const Home = () => {
                   );
                 })}
               </div>
-            </div>
+            </div> */}
 
             {/* Current Streak */}
             <div className="bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl shadow-lg p-6 text-white">
@@ -262,7 +264,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

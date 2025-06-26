@@ -41,12 +41,16 @@ const Login: React.FC = () => {
         return;
       }
 
-      // On success, redirect to login or dashboard
-      router.push("/Views/Layout");
-
+      // On success, redirect to  dashboard
       const data = await response.json();
 
-      localStorage.setItem("token", data)
+      if (data && data.token) {
+        localStorage.setItem("token", data.token);
+        const dashboardUrl = encodeURIComponent("/Views/Layout");
+        router.push(dashboardUrl);
+      } else {
+        setError("Invalid response from server.");
+      }
 
     } catch (err) {
       console.error("Error creating account:", err);
@@ -199,7 +203,10 @@ const Login: React.FC = () => {
           {/* Sign Up Link */}
           <p className="text-center text-sm text-gray-600 mt-8">
             Don&apos;t have an account?{" "}
-            <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors underline" onClick={() => router.push('/Views/signup')}>
+            <button
+              className="text-blue-600 hover:text-blue-700 font-medium transition-colors underline"
+              onClick={() => router.push('/Views/signup')}
+            >
               Sign up for free
             </button>
           </p>
