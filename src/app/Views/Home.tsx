@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Zap, CheckCircle2, Timer, FileText, Play, Plus } from 'lucide-react';
+import BASE_URL from '../utils/api';
 
 const Home = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -16,6 +17,24 @@ const Home = () => {
       clearInterval(animation);
     };
   }, []);
+
+
+   useEffect(() => {
+    const email = localStorage.getItem("userEmail") || "musungaretanaka";
+    fetch(`${BASE_URL}/api/projects/getMyStats`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Fetched data:", data);
+        // Mapping upcomingTaskDetails to priorities using the imported interface
+        
+      })
+   
+  }, []);
+
 
   const quickStats = [
     { label: 'Tasks Done', value: completedTasks, icon: CheckCircle2, color: 'from-emerald-400 to-green-600', change: '+3' },
