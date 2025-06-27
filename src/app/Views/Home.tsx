@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Target, Zap, Trophy, CheckCircle2, Timer, TrendingUp, Star } from 'lucide-react';
+import { Calendar, Clock, Zap, Trophy, CheckCircle2, Timer, TrendingUp, FileText, Play, Plus } from 'lucide-react';
 import BASE_URL from '../utils/api';
-import DailyPriorities from '../Interfaces/DailyPriorites';
 
-// Remove the local DailyPriorities type definition
 
 const Home = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [animatedValue, setAnimatedValue] = useState(0);
-  const [todaysPriorities, setTodaysPriorities] = useState<DailyPriorities[]>([]);
-  const [loadingPriorities, setLoadingPriorities] = useState(true);
+
   const [completedTasks, setCompletedTasks] = useState<number>(0);  
+  const [streak, setStreak] = useState<number>(0); 
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -25,7 +23,6 @@ const Home = () => {
 
   useEffect(() => {
     const email = localStorage.getItem("userEmail") || "musungaretanaka";
-    setLoadingPriorities(true);
     fetch(`${BASE_URL}/api/projects/getMyStats`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -33,43 +30,21 @@ const Home = () => {
     })
       .then(res => res.json())
       .then(data => {
-
         console.log("Fetched data:", data.completedDailyTasks);
         setCompletedTasks(data.completedDailyTasks || 0); 
-        // Mapping upcomingTaskDetails to priorities using the imported interface
-        if (data && data.upcomingTaskDetails) {
-          setTodaysPriorities(
-            data.upcomingTaskDetails.map((task: { title: string; description?: string }, idx: number) => ({
-              id: (idx + 1).toString(), 
-              title: task.title,
-              description: task.description || "",
-              priority: "medium", 
-              completed: false,   
-              time: "",          
-            }))
-          );
-        } else {
-          setTodaysPriorities([]);
-        }
-      })
-      .catch(() => setTodaysPriorities([]))
-      .finally(() => setLoadingPriorities(false));
+        setStreak(data.streak);
+        console.log("Streak:", data.streak);
+      });
   }, []);
 
   const quickStats = [
     { label: 'Tasks Done Today', value: completedTasks, icon: CheckCircle2, color: 'from-emerald-400 to-green-600', change: '+3' },
     { label: 'Focus Time', value: '4h 32m', icon: Timer, color: 'from-blue-400 to-indigo-600', change: '+45m' },
-    { label: 'Current Streak', value: 23, icon: Zap, color: 'from-amber-400 to-orange-600', change: 'days' },
+    { label: 'Current Streak', value: streak, icon: Zap, color: 'from-amber-400 to-orange-600', change: 'days' },
     { label: 'Productivity Score', value: 87, icon: TrendingUp, color: 'from-purple-400 to-pink-600', change: '+12%' }
   ];
 
-  const recentActivity = [
-    { action: 'Completed "Design wireframes"', time: '12 minutes ago', type: 'task' },
-    { action: 'Started focus session', time: '1 hour ago', type: 'focus' },
-    { action: 'Added 3 new tasks', time: '2 hours ago', type: 'create' },
-    { action: 'Achieved daily goal', time: '3 hours ago', type: 'achievement' }
-  ];
-
+ 
   const upcomingDeadlines = [
     { task: 'Product launch presentation', due: 'Tomorrow, 2:00 PM', urgent: true },
     { task: 'Monthly report submission', due: 'Thu, Jun 19', urgent: false },
@@ -82,30 +57,14 @@ const Home = () => {
     { event: 'Team retrospective', time: '4:30 PM', status: 'upcoming' }
   ];
 
-  /* const quickActions = [
+   const quickActions = [
     { label: 'Add Task', icon: Plus, color: 'bg-gradient-to-r from-blue-500 to-blue-600', hoverColor: 'hover:from-blue-600 hover:to-blue-700' },
     { label: 'Start Timer', icon: Play, color: 'bg-gradient-to-r from-green-500 to-green-600', hoverColor: 'hover:from-green-600 hover:to-green-700' },
     { label: 'New Note', icon: FileText, color: 'bg-gradient-to-r from-purple-500 to-purple-600', hoverColor: 'hover:from-purple-600 hover:to-purple-700' },
     { label: 'Schedule', icon: Calendar, color: 'bg-gradient-to-r from-orange-500 to-orange-600', hoverColor: 'hover:from-orange-600 hover:to-orange-700' }
-  ]; */
+  ]; 
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'border-red-400 bg-red-50';
-      case 'medium': return 'border-yellow-400 bg-yellow-50';
-      case 'low': return 'border-green-400 bg-green-50';
-      default: return 'border-gray-300 bg-gray-50';
-    }
-  };
 
-  const getPriorityDot = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'bg-red-400';
-      case 'medium': return 'bg-yellow-400';
-      case 'low': return 'bg-green-400';
-      default: return 'bg-gray-400';
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
@@ -118,6 +77,7 @@ const Home = () => {
                 Good {currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}!
               </h1>
               <p className="text-gray-600 mt-2 text-lg">Ready to make today productive?</p>
+            </div>
             <div className="text-right">
               <div className="text-2xl font-semibold text-gray-800">
                 {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -155,51 +115,10 @@ const Home = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Today's Priorities */}
-          <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <Target className="w-6 h-6 text-indigo-600" />
-                <h2 className="text-xl font-bold text-gray-900">Today&apos;s Priorities</h2>
-                <span className="ml-auto bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">
-                  {todaysPriorities.filter(t => !t.completed).length} remaining
-                </span>
-              </div>
-            </div>
-            <div className="p-6 space-y-4">
-              {loadingPriorities ? (
-                <div>Loading priorities...</div>
-              ) : todaysPriorities.length === 0 ? (
-                <div>No priorities for today.</div>
-              ) : (
-                todaysPriorities.map((item) => (
-                  <div key={item.id} className={`p-4 rounded-xl border-2 transition-all duration-200 hover:shadow-md ${getPriorityColor(item.priority)} ${item.completed ? 'opacity-60' : ''}`}>
-                    <div className="flex items-center gap-4">
-                      <button className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-colors ${item.completed ? 'bg-green-500 border-green-500' : 'border-gray-300 hover:border-indigo-400'}`}>
-                        {item.completed && <CheckCircle2 className="w-5 h-5 text-white" />}
-                      </button>
-                      <div className="flex-1">
-                        <div className={`font-medium ${item.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
-                          {item.title}
-                        </div>
-                        {item.description && (
-                          <div className="text-sm text-gray-500">{item.description}</div>
-                        )}
-                        <div className="flex items-center gap-3 mt-1">
-                          <div className={`w-2 h-2 rounded-full ${getPriorityDot(item.priority)}`}></div>
-                          <span className="text-sm text-gray-500 capitalize">{item.priority} priority</span>
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-500">{item.time}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
+         
 
           {/* Quick Actions */}
-         {/*  <div className="space-y-6">
+           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <Zap className="w-6 h-6 text-purple-600" />
@@ -216,7 +135,7 @@ const Home = () => {
                   );
                 })}
               </div>
-            </div> */}
+            </div> 
 
             {/* Current Streak */}
             <div className="bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl shadow-lg p-6 text-white">
@@ -238,25 +157,7 @@ const Home = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Activity */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
-                <Star className="w-6 h-6 text-yellow-500" />
-                Recent Activity
-              </h2>
-            </div>
-            <div className="p-6 space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className={`w-2 h-2 rounded-full mt-2 ${activity.type === 'task' ? 'bg-green-400' : activity.type === 'focus' ? 'bg-blue-400' : activity.type === 'create' ? 'bg-purple-400' : 'bg-yellow-400'}`}></div>
-                  <div>
-                    <p className="text-gray-900 text-sm font-medium">{activity.action}</p>
-                    <p className="text-gray-500 text-xs">{activity.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          
 
           {/* Upcoming Deadlines */}
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
