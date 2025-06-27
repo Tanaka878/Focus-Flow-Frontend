@@ -5,7 +5,7 @@ import BASE_URL from '../utils/api';
 const Home = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [, setAnimatedValue] = useState(0);
-  const [completedTasks] = useState(12);  
+  const [completedTasks, setCompletedTasks] = useState(0);  
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -28,6 +28,7 @@ const Home = () => {
     })
       .then(res => res.json())
       .then(data => {
+        setCompletedTasks(data.completedDailyTasks); 
         console.log("Fetched data:", data);
         // Mapping upcomingTaskDetails to priorities using the imported interface
         
