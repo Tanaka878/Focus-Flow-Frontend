@@ -10,6 +10,7 @@ const Home = () => {
   const [animatedValue, setAnimatedValue] = useState(0);
   const [todaysPriorities, setTodaysPriorities] = useState<DailyPriorities[]>([]);
   const [loadingPriorities, setLoadingPriorities] = useState(true);
+  const [completedTasks, setCompletedTasks] = useState<number>(0);  
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -32,16 +33,19 @@ const Home = () => {
     })
       .then(res => res.json())
       .then(data => {
+
+        console.log("Fetched data:", data.completedDailyTasks);
+        setCompletedTasks(data.completedDailyTasks || 0); 
         // Mapping upcomingTaskDetails to priorities using the imported interface
         if (data && data.upcomingTaskDetails) {
           setTodaysPriorities(
             data.upcomingTaskDetails.map((task: { title: string; description?: string }, idx: number) => ({
-              id: (idx + 1).toString(), // id as string to match interface
+              id: (idx + 1).toString(), 
               title: task.title,
               description: task.description || "",
-              priority: "medium", // default, adjust if backend provides
-              completed: false,   // default, adjust if backend provides
-              time: "",           // default, adjust if backend provides
+              priority: "medium", 
+              completed: false,   
+              time: "",          
             }))
           );
         } else {
@@ -53,7 +57,7 @@ const Home = () => {
   }, []);
 
   const quickStats = [
-    { label: 'Tasks Done Today', value: 12, icon: CheckCircle2, color: 'from-emerald-400 to-green-600', change: '+3' },
+    { label: 'Tasks Done Today', value: completedTasks, icon: CheckCircle2, color: 'from-emerald-400 to-green-600', change: '+3' },
     { label: 'Focus Time', value: '4h 32m', icon: Timer, color: 'from-blue-400 to-indigo-600', change: '+45m' },
     { label: 'Current Streak', value: 23, icon: Zap, color: 'from-amber-400 to-orange-600', change: 'days' },
     { label: 'Productivity Score', value: 87, icon: TrendingUp, color: 'from-purple-400 to-pink-600', change: '+12%' }
