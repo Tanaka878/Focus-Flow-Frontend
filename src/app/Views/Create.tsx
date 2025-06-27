@@ -74,12 +74,7 @@ const Create = () => {
     taskTimeline: { plannedStart: '', plannedEnd: '' },
     subTasks: []
   });
-  const [newSubTask, setNewSubTask] = useState<SubTask>({
-    title: '',
-    description: '',
-    estimatedHours: '',
-    subTaskTimeline: { plannedStart: '', plannedEnd: '' }
-  });
+ 
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -117,31 +112,7 @@ const Create = () => {
     }));
   };
 
-  const addSubTask = () => {
-    if (newSubTask.title) {
-      setNewTask(prev => ({
-        ...prev,
-        subTasks: [...prev.subTasks, { 
-          ...newSubTask, 
-          subTaskId: Date.now().toString(),
-          status: 'TODO'
-        }]
-      }));
-      setNewSubTask({
-        title: '',
-        description: '',
-        estimatedHours: '',
-        subTaskTimeline: { plannedStart: '', plannedEnd: '' }
-      });
-    }
-  };
 
-  const removeSubTask = (subTaskId: string) => {
-    setNewTask(prev => ({
-      ...prev,
-      subTasks: prev.subTasks.filter(subTask => subTask.subTaskId !== subTaskId)
-    }));
-  };
 
   const addTask = () => {
     if (newTask.title) {
@@ -333,13 +304,7 @@ const Create = () => {
           className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
         />
         <div className="flex flex-col sm:flex-row gap-2 w-full">
-          <input
-            type="text"
-            value={newMember.role}
-            onChange={(e) => setNewMember({ ...newMember, role: e.target.value })}
-            placeholder="Role"
-            className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
-          />
+          
           <button
             type="button"
             onClick={addMember}
@@ -393,178 +358,122 @@ const Create = () => {
           {currentStep === 4 && (
             <div className="space-y-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">Project Tasks</h2>
-              
-              {/* Add New Task */}
-              <div className="border border-gray-200 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">Add New Task</h3>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      value={newTask.title}
-                      onChange={(e) => setNewTask({...newTask, title: e.target.value})}
-                      placeholder="Task title"
-                      className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <select
-                      value={newTask.status}
-                      onChange={(e) => setNewTask({...newTask, status: e.target.value})}
-                      className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                      <option value="TODO">To Do</option>
-                      <option value="IN_PROGRESS">In Progress</option>
-                      <option value="COMPLETED">Completed</option>
-                      <option value="CANCELLED">Cancelled</option>
-                    </select>
-                  </div>
-                  
-                  <textarea
-                    value={newTask.description}
-                    onChange={(e) => setNewTask({...newTask, description: e.target.value})}
-                    placeholder="Task description"
-                    rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input
-                      type="text"
-                      value={newTask.assignedTo}
-                      onChange={(e) => setNewTask({...newTask, assignedTo: e.target.value})}
-                      placeholder="Assigned to"
-                      className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <input
-                      type="number"
-                      value={newTask.estimatedHours}
-                      onChange={(e) => setNewTask({...newTask, estimatedHours: e.target.value})}
-                      placeholder="Estimated hours"
-                      className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <div className="flex gap-2">
-                      <input
-                        type="date"
-                        value={newTask.taskTimeline.plannedStart}
-                        onChange={(e) => setNewTask({
-                          ...newTask,
-                          taskTimeline: {...newTask.taskTimeline, plannedStart: e.target.value}
-                        })}
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="date"
-                        value={newTask.taskTimeline.plannedEnd}
-                        onChange={(e) => setNewTask({
-                          ...newTask,
-                          taskTimeline: {...newTask.taskTimeline, plannedEnd: e.target.value}
-                        })}
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Subtasks */}
-                  <div>
-                    <h4 className="font-medium text-gray-700 mb-2">Subtasks</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
-                      <input
-                        type="text"
-                        value={newSubTask.title}
-                        onChange={(e) => setNewSubTask({...newSubTask, title: e.target.value})}
-                        placeholder="Subtask title"
-                        className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                      />
-                      <div className="flex gap-2">
-                        <input
-                          type="number"
-                          value={newSubTask.estimatedHours}
-                          onChange={(e) => setNewSubTask({...newSubTask, estimatedHours: e.target.value})}
-                          placeholder="Hours"
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                        />
-                        <button
-                          type="button"
-                          onClick={addSubTask}
-                          className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors text-sm"
-                        >
-                          <Plus size={16} />
-                        </button>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      {newTask.subTasks.map((subTask) => (
-                        <div key={subTask.subTaskId} className="flex items-center justify-between p-2 bg-gray-50 rounded text-sm">
-                          <span>{subTask.title} ({subTask.estimatedHours || 0}h)</span>
-                          <button
-                            type="button"
-                            onClick={() => subTask.subTaskId && removeSubTask(subTask.subTaskId)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <X size={14} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={addTask}
-                    className="w-full md:w-auto px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                  >
-                    Add Task
-                  </button>
+    {/* Add New Task */}
+    <div className="border border-gray-200 rounded-lg p-6">
+      <h3 className="text-lg font-semibold text-gray-700 mb-4">Add New Task</h3>
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            value={newTask.title}
+            onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+            placeholder="Task title"
+            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <select
+            value={newTask.status}
+            onChange={(e) => setNewTask({...newTask, status: e.target.value})}
+            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="TODO">To Do</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+        </div>
+        <textarea
+          value={newTask.description}
+          onChange={(e) => setNewTask({...newTask, description: e.target.value})}
+          placeholder="Task description"
+          rows={3}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-black">
+          <input
+            type="number"
+            value={newTask.estimatedHours}
+            onChange={(e) => setNewTask({...newTask, estimatedHours: e.target.value})}
+            placeholder="Estimated hours"
+            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <div className="flex gap-2">
+            <input
+              type="date"
+              value={newTask.taskTimeline.plannedStart}
+              onChange={(e) => setNewTask({
+                ...newTask,
+                taskTimeline: {...newTask.taskTimeline, plannedStart: e.target.value}
+              })}
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <input
+              type="date"
+              value={newTask.taskTimeline.plannedEnd}
+              onChange={(e) => setNewTask({
+                ...newTask,
+                taskTimeline: {...newTask.taskTimeline, plannedEnd: e.target.value}
+              })}
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={addTask}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Add Task
+        </button>
+      </div>
+    </div>
+    {/* Task List */}
+    <div className="space-y-4">
+      {formData.tasks.map((task) => (
+        <div key={task.taskId} className="border border-gray-200 rounded-lg p-4">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <h4 className="font-semibold text-gray-800">{task.title}</h4>
+              <p className="text-gray-600 text-sm">{task.description}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => task.taskId && removeTask(task.taskId)}
+              className="text-red-500 hover:text-red-700"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2 text-sm">
+            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
+              {task.status.replace('_', ' ')}
+            </span>
+            {task.assignedTo && (
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded">
+                {task.assignedTo}
+              </span>
+            )}
+            {task.estimatedHours && (
+              <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                <Clock size={12} className="inline mr-1" />
+                {task.estimatedHours}h
+              </span>
+            )}
+          </div>
+          {task.subTasks.length > 0 && (
+            <div className="mt-2 pl-4 border-l-2 border-gray-200">
+              <p className="text-sm font-medium text-gray-600">Subtasks:</p>
+              {task.subTasks.map((subTask) => (
+                <div key={subTask.subTaskId} className="text-sm text-gray-600">
+                  • {subTask.title} ({subTask.estimatedHours || 0}h)
                 </div>
-              </div>
-
-              {/* Task List */}
-              <div className="space-y-4">
-                {formData.tasks.map((task) => (
-                  <div key={task.taskId} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className="font-semibold text-gray-800">{task.title}</h4>
-                        <p className="text-gray-600 text-sm">{task.description}</p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => task.taskId && removeTask(task.taskId)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X size={18} />
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap gap-2 text-sm">
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                        {task.status.replace('_', ' ')}
-                      </span>
-                      {task.assignedTo && (
-                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded">
-                          {task.assignedTo}
-                        </span>
-                      )}
-                      {task.estimatedHours && (
-                        <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
-                          <Clock size={12} className="inline mr-1" />
-                          {task.estimatedHours}h
-                        </span>
-                      )}
-                    </div>
-                    {task.subTasks.length > 0 && (
-                      <div className="mt-2 pl-4 border-l-2 border-gray-200">
-                        <p className="text-sm font-medium text-gray-600">Subtasks:</p>
-                        {task.subTasks.map((subTask) => (
-                          <div key={subTask.subTaskId} className="text-sm text-gray-600">
-                            • {subTask.title} ({subTask.estimatedHours || 0}h)
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           )}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
           {/* Navigation Buttons */}
           <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
