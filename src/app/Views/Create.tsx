@@ -1,5 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { Plus, X, Calendar, Users, CheckCircle, Clock, Target } from 'lucide-react';
+import BASE_URL from '../utils/api';
 
 
 
@@ -131,10 +132,31 @@ const Create: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLButtonElement>) => {
+  const postProjectData = async (data: FormData) => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/projects/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to create project');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error posting project:', error);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log('Project Data:', formData);
-    alert('Project created successfully! Check console for data.');
+    try {
+      await postProjectData(formData);
+      alert('Project created successfully!');
+    } catch {
+      alert('Failed to create project. Please try again.');
+    }
   };
 
   const steps = [
