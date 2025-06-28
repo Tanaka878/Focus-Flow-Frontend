@@ -1,14 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { Plus, X, Calendar, Users, CheckCircle, Clock, Target } from 'lucide-react';
 
-type SubTask = {
-  subTaskId?: string;
-  title: string;
-  description: string;
-  estimatedHours: string | number;
-  subTaskTimeline: { plannedStart: string; plannedEnd: string };
-  status?: string;
-};
+
 
 type Task = {
   taskId?: string;
@@ -18,14 +11,12 @@ type Task = {
   assignedTo: string;
   estimatedHours: string | number;
   taskTimeline: { plannedStart: string; plannedEnd: string };
-  subTasks: SubTask[];
   createdBy?: string;
 };
 
 type Member = {
-  memberId?: string;
-  name: string;
-  role: string;
+  email: string;
+  memberId?: string; // Added to match usage
 };
 
 type FormData = {
@@ -35,17 +26,15 @@ type FormData = {
   projectType: string;
   projectStatus: string;
   projectTimeline: {
-    plannedStart: string;
-    plannedEnd: string;
     actualStart: string;
     actualEnd: string;
   };
   projectTags: { [key: string]: string };
   members: Member[];
-  tasks: Task[];
+  tasks: Task[]; // <-- Added this line
 };
 
-const Create = () => {
+const Create: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     projectName: '',
     projectDescription: '',
@@ -53,18 +42,16 @@ const Create = () => {
     projectType: 'PERSONAL',
     projectStatus: 'ACTIVE',
     projectTimeline: {
-      plannedStart: '',
-      plannedEnd: '',
       actualStart: '',
       actualEnd: ''
     },
     projectTags: {},
     members: [],
-    tasks: []
+    tasks: [], // <-- Added this line
   });
 
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [newMember, setNewMember] = useState<Member>({ name: '', role: '' });
+  const [newMember, setNewMember] = useState<Member>({ email: '' });
   const [newTask, setNewTask] = useState<Task>({
     title: '',
     description: '',
@@ -72,7 +59,6 @@ const Create = () => {
     assignedTo: '',
     estimatedHours: '',
     taskTimeline: { plannedStart: '', plannedEnd: '' },
-    subTasks: []
   });
  
 
@@ -96,19 +82,19 @@ const Create = () => {
 
 
   const addMember = () => {
-    if (newMember.name && newMember.role) {
+    if (newMember.email ) {
       setFormData(prev => ({
         ...prev,
         members: [...prev.members, { ...newMember, memberId: Date.now().toString() }]
       }));
-      setNewMember({ name: '', role: '' });
+      setNewMember({ email: ''});
     }
   };
 
-  const removeMember = (memberId: string) => {
+  const removeMember = (email: string) => {
     setFormData(prev => ({
       ...prev,
-      members: prev.members.filter(member => member.memberId !== memberId)
+      members: prev.members.filter(member => member.email !== email)
     }));
   };
 
@@ -134,7 +120,6 @@ const Create = () => {
         assignedTo: '',
         estimatedHours: '',
         taskTimeline: { plannedStart: '', plannedEnd: '' },
-        subTasks: []
       });
     }
   };
@@ -298,8 +283,8 @@ const Create = () => {
       <div className="flex flex-col gap-y-3 sm:grid sm:grid-cols-1 md:grid-cols-2 sm:gap-4 mb-4">
         <input
           type="text"
-          value={newMember.name}
-          onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
+          value={newMember.email}
+          onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
           placeholder="Member name"
           className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
         />
@@ -318,23 +303,20 @@ const Create = () => {
       <div className="space-y-2 max-h-64 overflow-y-auto">
         {formData.members.map((member) => (
           <div
-            key={member.memberId}
+            key={member.email}
             className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-md sm:rounded-lg hover:bg-gray-100 transition-colors duration-200"
           >
             <div className="flex-1 min-w-0">
               <div className="flex flex-col sm:flex-row sm:items-center">
                 <span className="font-medium text-sm sm:text-base text-gray-900 truncate">
-                  {member.name}
+                  {member.email}
                 </span>
-                <span className="text-xs sm:text-sm text-gray-500 sm:ml-2 mt-0.5 sm:mt-0">
-                  <span className="hidden sm:inline">• </span>
-                  {member.role}
-                </span>
+               
               </div>
             </div>
             <button
               type="button"
-              onClick={() => member.memberId && removeMember(member.memberId)}
+              onClick={() => member.email && removeMember(member.email)}
               className="ml-2 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-all duration-200 flex-shrink-0"
             >
               <X size={16} className="sm:w-4 sm:h-4" />
@@ -350,8 +332,6 @@ const Create = () => {
     </div>
   </div>
 )}
-
-
 
 
 {/* Step 4: Tasks */}
@@ -459,16 +439,7 @@ const Create = () => {
               </span>
             )}
           </div>
-          {task.subTasks.length > 0 && (
-            <div className="mt-2 pl-4 border-l-2 border-gray-200">
-              <p className="text-sm font-medium text-gray-600">Subtasks:</p>
-              {task.subTasks.map((subTask) => (
-                <div key={subTask.subTaskId} className="text-sm text-gray-600">
-                  • {subTask.title} ({subTask.estimatedHours || 0}h)
-                </div>
-              ))}
-            </div>
-          )}
+          
         </div>
       ))}
     </div>
