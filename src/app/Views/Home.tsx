@@ -2,10 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Zap, CheckCircle2, Timer, FileText, Play, Plus } from 'lucide-react';
 import BASE_URL from '../utils/api';
 
+interface UpcomingTaskDetails {
+  title: string;
+  description: string;
+  localDate: string;
+}
+
 const Home = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [, setAnimatedValue] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);  
+    const [upcomingTasks, setUpcomingTasks] = useState<UpcomingTaskDetails[]>([]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -29,9 +36,8 @@ const Home = () => {
       .then(res => res.json())
       .then(data => {
         setCompletedTasks(data.completedDailyTasks); 
+        setUpcomingTasks(Array.isArray(data.upcomingTaskDetails) ? data.upcomingTaskDetails : []);
         console.log("Fetched data:", data);
-        // Mapping upcomingTaskDetails to priorities using the imported interface
-        
       })
    
   }, []);
@@ -42,11 +48,11 @@ const Home = () => {
     { label: 'Focus Time', value: '4h 32m', icon: Timer, color: 'from-blue-400 to-indigo-600', change: '+45m' }
   ];
 
-  const upcomingDeadlines = [
-    { task: 'Product launch presentation', due: 'Tomorrow, 2PM', urgent: true },
-    { task: 'Monthly report', due: 'Thu, Jun 19', urgent: false },
-    { task: 'Team review', due: 'Fri, Jun 20', urgent: false }
-  ];
+  const upcomingDeadlines = upcomingTasks.map(task => ({
+    task: task.title,
+    due: task.localDate,
+    urgent: false, // You can add logic to determine urgency
+  }));
 
   const todaysSchedule = [
     { event: 'Daily standup', time: '9:00 AM', status: 'completed' },
