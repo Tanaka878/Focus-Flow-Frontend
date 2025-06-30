@@ -12,7 +12,7 @@ type Task = {
   status: string;
   assignedTo: string;
   estimatedHours: string | number;
-  taskTimeline: { plannedStart: string; plannedEnd: string };
+  taskTimeline: { start: string; end: string };
   createdBy?: string;
 };
 
@@ -60,7 +60,7 @@ const Create: React.FC = () => {
     status: 'TODO',
     assignedTo: '',
     estimatedHours: '',
-    taskTimeline: { plannedStart: '', plannedEnd: '' },
+    taskTimeline: { start: '', end: '' },
   });
  
 
@@ -121,7 +121,7 @@ const Create: React.FC = () => {
         status: 'TODO',
         assignedTo: '',
         estimatedHours: '',
-        taskTimeline: { plannedStart: '', plannedEnd: '' },
+        taskTimeline: { start: '', end: '' },
       });
     }
   };
@@ -402,19 +402,19 @@ const Create: React.FC = () => {
           <div className="flex gap-2">
             <input
               type="date"
-              value={newTask.taskTimeline.plannedStart}
+              value={newTask.taskTimeline.start}
               onChange={(e) => setNewTask({
                 ...newTask,
-                taskTimeline: {...newTask.taskTimeline, plannedStart: e.target.value}
+                taskTimeline: {...newTask.taskTimeline, start: e.target.value}
               })}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <input
               type="date"
-              value={newTask.taskTimeline.plannedEnd}
+              value={newTask.taskTimeline.end}
               onChange={(e) => setNewTask({
                 ...newTask,
-                taskTimeline: {...newTask.taskTimeline, plannedEnd: e.target.value}
+                taskTimeline: {...newTask.taskTimeline, end: e.target.value}
               })}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
