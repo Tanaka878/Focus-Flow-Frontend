@@ -4,9 +4,7 @@ import Navbar from "../NavBar";
 import TopNavbar from "../TopNavBar";
 import Home from "../Home";
 import Settings from "../Settings";
-import Create from "../Create";
-
-
+import ProjectCreationPage from "../ProjectCreation/page";
 
 export default function Layout({  }) {
     const [currentView, setCurrentView] = useState('Home');
@@ -19,7 +17,7 @@ const renderContent = () => {
       case 'Settings':
         return <Settings />;
       case 'Create':
-        return < Create/>; 
+        return < ProjectCreationPage/>; 
       
       default:
         return <Home />;

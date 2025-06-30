@@ -1,6 +1,7 @@
+'use client';
 import React, { useState, FormEvent } from 'react';
 import { Plus, X, Calendar, Users, CheckCircle, Clock, Target } from 'lucide-react';
-import BASE_URL from '../utils/api';
+import BASE_URL from '../../utils/api';
 
 
 
