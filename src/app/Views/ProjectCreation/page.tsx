@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { Plus, Sparkles, Target, ArrowRight, Zap, CheckCircle2, Clock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
