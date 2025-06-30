@@ -12,8 +12,7 @@ const ProjectCreationPage = () => {
   };
 
   const handleAICreate = () => {
-    // Navigate to AI project creation
-    console.log('Navigate to AI project creation');
+    router.push('/Views/AI_Creation/');
   };
 
   return (
