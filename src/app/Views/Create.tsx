@@ -268,7 +268,7 @@ const Create: React.FC = () => {
                     type="date"
                     value={formData.projectTimeline.actualStart}
                     onChange={(e) => handleTimelineChange('actualStart', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                   />
                 </div>
 
@@ -280,7 +280,7 @@ const Create: React.FC = () => {
                     type="date"
                     value={formData.projectTimeline.actualEnd}
                     onChange={(e) => handleTimelineChange('actualEnd', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                   />
                 </div>
               </div>
@@ -307,8 +307,8 @@ const Create: React.FC = () => {
           type="text"
           value={newMember.email}
           onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
-          placeholder="Member name"
-          className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+          placeholder="Member email"
+          className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-md sm:rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base text-black"
         />
         <div className="flex flex-col sm:flex-row gap-2 w-full">
           
@@ -364,13 +364,13 @@ const Create: React.FC = () => {
     <div className="border border-gray-200 rounded-lg p-6">
       <h3 className="text-lg font-semibold text-gray-700 mb-4">Add New Task</h3>
       <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-black">
           <input
             type="text"
             value={newTask.title}
             onChange={(e) => setNewTask({...newTask, title: e.target.value})}
             placeholder="Task title"
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
           />
           <select
             value={newTask.status}
@@ -388,7 +388,7 @@ const Create: React.FC = () => {
           onChange={(e) => setNewTask({...newTask, description: e.target.value})}
           placeholder="Task description"
           rows={3}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-black">
           <input
@@ -396,7 +396,7 @@ const Create: React.FC = () => {
             value={newTask.estimatedHours}
             onChange={(e) => setNewTask({...newTask, estimatedHours: e.target.value})}
             placeholder="Estimated hours"
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
           />
           <div className="flex gap-2">
             <input
