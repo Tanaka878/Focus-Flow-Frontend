@@ -155,6 +155,8 @@ const Create: React.FC = () => {
     try {
       await postProjectData(formData);
       alert('Project created successfully!');
+            window.location.href = '/Views/Layout/';
+
     } catch {
       alert('Failed to create project. Please try again.');
     }

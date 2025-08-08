@@ -1,4 +1,4 @@
-import Login from "./Views/login/page";
+import Login from "./views/login/page";
 export default function Home() {
   return (
     <div>

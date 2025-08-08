@@ -4,7 +4,7 @@ import Navbar from "../NavBar";
 import TopNavbar from "../TopNavBar";
 import Home from "../Home";
 import Settings from "../Settings";
-import ProjectCreationPage from "../ProjectCreation/page";
+import ProjectCreationPage from "../project-creation/page";
 
 export default function Layout({  }) {
     const [currentView, setCurrentView] = useState('Home');

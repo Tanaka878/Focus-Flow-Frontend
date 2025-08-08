@@ -9,11 +9,11 @@ const ProjectCreationPage = () => {
   const [hoveredOption, setHoveredOption] = useState<string | null>("");
 
   const handleManualCreate = () => {
-    router.push('/Views/ProjectCreation/'); 
+    router.push('/views/manual-creation/'); 
   };
 
   const handleAICreate = () => {
-    router.push('/Views/AI_Creation/');
+    router.push('/views/ai-creation/');
   };
 
   return (
