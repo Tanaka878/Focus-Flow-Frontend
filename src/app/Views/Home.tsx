@@ -8,6 +8,24 @@ interface UpcomingTaskDetails {
   localDate: string;
 }
 
+function QuickAction(label:string){
+  console.log(`Quick Action selected: ${label}`);
+
+  switch(label) {
+    case 'Add Task':
+      window.location.href = '/Views/ManualCreation/';
+      break;
+    case 'Timer':
+      window.location.href = '/Views/Timer/'; 
+      break;
+    case 'Note':
+      window.location.href = '/Views/Note/';      
+      break                                
+
+}
+}
+  
+
 const Home = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [, setAnimatedValue] = useState(0);
@@ -124,17 +142,23 @@ const Home = () => {
                 <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
                 Quick Actions
               </h2>
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {quickActions.map((action, index) => {
                   const Icon = action.icon;
                   return (
-                    <button key={index} className={`${action.color} hover:scale-105 text-white p-3 sm:p-4 rounded-lg lg:rounded-xl transition-all duration-200 transform hover:shadow-lg flex flex-col items-center gap-2 group`}>
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 group-hover:animate-pulse" />
-                      <span className="text-xs sm:text-sm font-medium">{action.label}</span>
-                    </button>
+                  <button
+                    key={index}
+                    className={`${action.color} hover:scale-105 text-white p-3 sm:p-4 rounded-lg lg:rounded-xl transition-all duration-200 transform hover:shadow-lg flex flex-col items-center gap-2 group`}
+                    onClick={() => {
+                      QuickAction(action.label);
+                    }}
+                  >
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 group-hover:animate-pulse" />
+                    <span className="text-xs sm:text-sm font-medium">{action.label}</span>
+                  </button>
                   );
                 })}
-              </div>
+                </div>
             </div>
           </div>
 
