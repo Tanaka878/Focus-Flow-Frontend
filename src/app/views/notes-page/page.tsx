@@ -21,7 +21,7 @@ const MyNotesPage: React.FC = () => {
   const fetchMyNotes = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/api/projects/getMyNotes`, {
+      const response = await fetch(`${BASE_URL}/api/notes/getMyNotes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: ownerEmail } as RequestData),
@@ -43,7 +43,7 @@ const MyNotesPage: React.FC = () => {
     if (!newNote.trim()) return;
 
     try {
-      const response = await fetch(`${BASE_URL}/api/projects/saveNotes`, {
+      const response = await fetch(`${BASE_URL}/api/notes/saveNotes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ownerEmail, notes: newNote }),
@@ -65,7 +65,7 @@ const MyNotesPage: React.FC = () => {
     if (!editingNote) return;
 
     try {
-      const response = await fetch(`${BASE_URL}/api/projects/updateNote`, {
+      const response = await fetch(`${BASE_URL}/api/notes/updateNote`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
