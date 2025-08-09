@@ -1,37 +1,32 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import BASE_URL from "../../utils/api";
-
-interface NotesDTO {
-  ownerEmail: string;
-  notes: string;
-}
-
-interface RequestData {
-  email: string;
-}
+import NotesDTO from "@/app/Interfaces/NotesDTO";
+import RequestData from "@/app/Interfaces/RequestData";
 
 const MyNotesPage: React.FC = () => {
   const [notesList, setNotesList] = useState<NotesDTO[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showForm, setShowForm] = useState(false);
+
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingNote, setEditingNote] = useState<NotesDTO | null>(null);
+
   const [newNote, setNewNote] = useState("");
 
   const ownerEmail = localStorage.getItem("userEmail") || "";
 
+  // Fetch notes from backend
   const fetchMyNotes = async () => {
     setLoading(true);
     try {
       const response = await fetch(`${BASE_URL}/api/projects/getMyNotes`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: ownerEmail } as RequestData),
       });
       if (!response.ok) throw new Error("Failed to fetch notes.");
-
       const data: NotesDTO[] = await response.json();
       setNotesList(data);
       setError("");
@@ -42,6 +37,7 @@ const MyNotesPage: React.FC = () => {
     }
   };
 
+  // Create new note
   const handleCreateNote = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newNote.trim()) return;
@@ -50,20 +46,50 @@ const MyNotesPage: React.FC = () => {
       const response = await fetch(`${BASE_URL}/api/projects/saveNotes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ownerEmail,
-          notes: newNote,
-        }),
+        body: JSON.stringify({ ownerEmail, notes: newNote }),
       });
 
       if (!response.ok) throw new Error("Failed to create note.");
 
       setNewNote("");
-      setShowForm(false);
-      await fetchMyNotes(); // Refresh the list
+      setShowCreateModal(false);
+      await fetchMyNotes();
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred.");
     }
+  };
+
+  // Update existing note
+  const handleUpdateNote = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingNote) return;
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/projects/updateNote`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...editingNote,
+          notes: newNote,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update note.");
+
+      setShowEditModal(false);
+      setEditingNote(null);
+      setNewNote("");
+      await fetchMyNotes();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred.");
+    }
+  };
+
+  // Open edit modal
+  const openEditModal = (note: NotesDTO) => {
+    setEditingNote(note);
+    setNewNote(note.notes);
+    setShowEditModal(true);
   };
 
   useEffect(() => {
@@ -89,17 +115,16 @@ const MyNotesPage: React.FC = () => {
 
         <div className="space-y-4">
           {notesList.length > 0 ? (
-            notesList.map((note, index) => (
+            notesList.map((note) => (
               <div
-                key={index}
-                className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm"
+                key={note.id}
+                className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:bg-gray-50"
+                onClick={() => openEditModal(note)}
               >
                 <p className="text-gray-800 leading-relaxed mb-3">
                   {note.notes}
                 </p>
-                <div className="text-sm text-gray-500">
-                  Owner: {note.ownerEmail}
-                </div>
+                <div className="text-sm text-gray-500">ID: {note.id}</div>
               </div>
             ))
           ) : (
@@ -114,8 +139,8 @@ const MyNotesPage: React.FC = () => {
 
       {/* Floating Create Note Button */}
       <button
-        onClick={() => setShowForm(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-blue-300"
+        onClick={() => setShowCreateModal(true)}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
         aria-label="Create new note"
       >
         <svg
@@ -123,19 +148,13 @@ const MyNotesPage: React.FC = () => {
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
         </svg>
       </button>
 
-      {/* Note Creation Modal */}
-      {showForm && (
+      {/* Create Note Modal */}
+      {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
             <h2 className="text-xl font-semibold mb-4">Create Note</h2>
@@ -150,7 +169,7 @@ const MyNotesPage: React.FC = () => {
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => setShowForm(false)}
+                  onClick={() => setShowCreateModal(false)}
                   className="px-4 py-2 border rounded-lg hover:bg-gray-100"
                 >
                   Cancel
@@ -160,6 +179,39 @@ const MyNotesPage: React.FC = () => {
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Note Modal */}
+      {showEditModal && editingNote && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+            <h2 className="text-xl font-semibold mb-4">Edit Note</h2>
+            <form onSubmit={handleUpdateNote} className="space-y-4">
+              <textarea
+                value={newNote}
+                onChange={(e) => setNewNote(e.target.value)}
+                placeholder="Edit your note..."
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-200"
+                rows={4}
+              />
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowEditModal(false)}
+                  className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Update
                 </button>
               </div>
             </form>
