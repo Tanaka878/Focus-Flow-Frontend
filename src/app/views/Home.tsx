@@ -13,13 +13,13 @@ function QuickAction(label:string){
 
   switch(label) {
     case 'Add Task':
-      window.location.href = '/Views/ManualCreation/';
+      window.location.href = '/views/manual-creation/';
       break;
     case 'Timer':
       window.location.href = '/Views/Timer/'; 
       break;
     case 'Note':
-      window.location.href = '/Views/Note/';      
+      window.location.href = '/views/notes-page/';      
       break                                
 
 }
