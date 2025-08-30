@@ -33,14 +33,9 @@ const renderContent = () => {
         {/* Demo content to show the navbar in action */}
         <div className="space-y-6">
           
-          
-          
-          
-          
+        
           {renderContent()}
-         
-          
-          
+             
         </div>
       </div>
       

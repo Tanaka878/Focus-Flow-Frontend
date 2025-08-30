@@ -8,6 +8,13 @@ interface UpcomingTaskDetails {
   localDate: string;
 }
 
+interface ProjectInfo{
+  id:string
+  name: string,
+  status:string,
+  description:string,
+}
+
 function QuickAction(label:string){
   console.log(`Quick Action selected: ${label}`);
 
@@ -31,6 +38,24 @@ const Home = () => {
   const [, setAnimatedValue] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);  
     const [upcomingTasks, setUpcomingTasks] = useState<UpcomingTaskDetails[]>([]);
+
+    const [projectInfo, setProjectInfo] = useState<ProjectInfo[]>([])
+
+    useEffect(() => {
+    const ownerEmail = localStorage.getItem("userEmail") || "musungaretanaka";
+    fetch(`${BASE_URL}/api/projects/projectInfo`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ownerEmail }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        setCompletedTasks(data.setProjectInfo); 
+        setUpcomingTasks(Array.isArray(data.upcomingTaskDetails) ? data.upcomingTaskDetails : []);
+        console.log("Fetched data:", data);
+      })
+   
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -209,6 +234,12 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+
+        <div className='text-black mt-3'>
+          Hello
+        </div>
+
       </div>
     </div>
   );
