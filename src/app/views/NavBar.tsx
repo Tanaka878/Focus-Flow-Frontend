@@ -13,10 +13,8 @@ const Navbar: React.FC<NavBarProps> = ({onSelectPage}) => {
   ];
 
   function handleClick(id: string, label: string){
-    console.log(id)
     setActiveTab(id)
     onSelectPage(label)
-
   }
 
   return (

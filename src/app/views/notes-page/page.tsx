@@ -122,6 +122,15 @@ const MyNotesPage: React.FC = () => {
         <div className="max-w-5xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div>
+                <button
+                onClick={() => window.history.back()}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow"
+                >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+                </button>
               <h1 className="text-3xl font-semibold text-slate-900 tracking-tight">My Notes</h1>
               <p className="text-slate-600 mt-1">Organize your thoughts and ideas</p>
             </div>
@@ -300,6 +309,12 @@ const MyNotesPage: React.FC = () => {
           </div>
         </div>
       )}
+
+
+      {/* <div className="fixed bottom-0 left-0 w-full z-40">
+        <Navbar onSelectPage={function (): void { }} />
+      </div> */}
+     
     </div>
   );
 };

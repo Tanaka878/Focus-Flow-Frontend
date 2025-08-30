@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Zap, CheckCircle2, Timer, FileText, Play, Plus } from 'lucide-react';
 import BASE_URL from '../utils/api';
+import ProjectInfo from '../Interfaces/ProjectInfo';
 
 interface UpcomingTaskDetails {
   title: string;
@@ -8,12 +9,7 @@ interface UpcomingTaskDetails {
   localDate: string;
 }
 
-interface ProjectInfo{
-  id:string
-  name: string,
-  status:string,
-  description:string,
-}
+
 
 function QuickAction(label:string){
   console.log(`Quick Action selected: ${label}`);
@@ -39,23 +35,23 @@ const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);  
     const [upcomingTasks, setUpcomingTasks] = useState<UpcomingTaskDetails[]>([]);
 
-    const [projectInfo, setProjectInfo] = useState<ProjectInfo[]>([])
+const [projectInfo, setProjectInfo] = useState<ProjectInfo[]>([]);
 
     useEffect(() => {
-    const ownerEmail = localStorage.getItem("userEmail") || "musungaretanaka";
-    fetch(`${BASE_URL}/api/projects/projectInfo`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ownerEmail }),
-    })
-      .then(res => res.json())
-      .then(data => {
-        setCompletedTasks(data.setProjectInfo); 
-        setUpcomingTasks(Array.isArray(data.upcomingTaskDetails) ? data.upcomingTaskDetails : []);
-        console.log("Fetched data:", data);
+      const ownerEmail = localStorage.getItem("userEmail") || "musungaretanaka";
+      fetch(`${BASE_URL}/api/projects/projectInfo`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ownerEmail }),
       })
-   
-  }, []);
+        .then(res => res.json())
+        .then(data => {
+          setProjectInfo(data.setProjectInfo); 
+          setUpcomingTasks(Array.isArray(data.upcomingTaskDetails) ? data.upcomingTaskDetails : []);
+          console.log("Fetched data:", data);
+        })
+     
+    }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -236,9 +232,21 @@ const Home = () => {
         </div>
 
 
-        <div className='text-black mt-3'>
-          Hello
-        </div>
+     <div className="text-black mt-3">
+  {!projectInfo || projectInfo.length === 0 ? (
+    <p>No project info available</p>
+  ) : (
+    projectInfo.map((project) => (
+      <div key={project.id} className="mb-4 border-b pb-2">
+        <h2 className="text-lg font-semibold">{project.name}</h2>
+        <p className="text-sm text-gray-600">Status: {project.status}</p>
+        <p className="text-sm">{project.description}</p>
+      </div>
+    ))
+  )}
+</div>
+
+
 
       </div>
     </div>
