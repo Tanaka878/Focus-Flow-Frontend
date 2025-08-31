@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Zap, CheckCircle2, Timer, FileText, Play, Plus } from 'lucide-react';
+import { Calendar, Clock, Zap, CheckCircle2, FileText, Play, Plus } from 'lucide-react';
 import BASE_URL from '../utils/api';
 import ProjectInfo from '../Interfaces/ProjectInfo';
 
