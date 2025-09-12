@@ -40,7 +40,8 @@ const Home = () => {
     })
       .then(res => res.json())
       .then(data => {
-        setProjectInfo(data.setProjectInfo || []);
+        console.log(data);              
+setProjectInfo(Array.isArray(data) ? data : []);
         setUpcomingTasks(Array.isArray(data.upcomingTaskDetails) ? data.upcomingTaskDetails : []);
       })
       .catch(err => console.error("Error fetching project info:", err));
@@ -177,18 +178,26 @@ const Home = () => {
         </div>
 
         {/* Project Info */}
-        <div className="text-black mt-3">
-          {projectInfo.length === 0 ? (
-            <p>No project info available</p>
-          ) : (
-            projectInfo.map(project => (
-              <div key={project.id} className="mb-4 border-b pb-2">
-                <h2 className="text-lg font-semibold">{project.name}</h2>
-                <p className="text-sm text-gray-600">Status: {project.status}</p>
-                <p className="text-sm">{project.description}</p>
-              </div>
-            ))
-          )}
+        <div className="flex mt-3">
+          <div className="text-black w-full max-w-md">
+            {projectInfo.length === 0 ? (
+              <p>No project info available</p>
+            ) : (
+              projectInfo.map(project => (
+          <div key={project.id} className="mb-4 border-b pb-2 relative">
+            <h2 className="text-lg font-semibold">{project.name}</h2>
+            <p className="text-sm text-gray-600">Status: {project.status}</p>
+            <p className="text-sm">{project.description}</p>
+            <button
+              className="absolute top-0 right-0 mt-2 mr-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+              onClick={() => window.location.href = `/views/project/${project.id}`}
+            >
+              View Project
+            </button>
+          </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>
