@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Zap, CheckCircle2, FileText, Play, Plus } from 'lucide-react';
+import { Calendar, Clock, Zap, CheckCircle2, FileText, Play, Plus, X } from 'lucide-react';
 import BASE_URL from '../utils/api';
 import ProjectInfo from '../Interfaces/ProjectInfo';
 
@@ -7,6 +7,30 @@ interface UpcomingTaskDetails {
   title: string;
   description: string;
   localDate: string;
+}
+
+interface ProjectDetails {
+  id: string;
+  projectName: string;
+  projectDescription: string;
+  author: string;
+  projectTimeline?: Record<string, string>; // key: string, value: ISO date string
+  projectStatus: 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED' | 'ARCHIVED';
+  members?: {
+    memberId: string;
+    memberEmail: string;
+  }[];
+  tasks?: {
+    taskId: string;
+    title: string;
+    description?: string;
+    status: 'TODO' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+    taskTimeline?: Record<string, string>;
+    createdAt?: string;
+    updatedAt?: string;
+  }[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 function QuickAction(label: string) {
@@ -30,7 +54,10 @@ const Home = () => {
   const [completedTasks, setCompletedTasks] = useState<number | null>(null);
   const [upcomingTasks, setUpcomingTasks] = useState<UpcomingTaskDetails[]>([]);
   const [projectInfo, setProjectInfo] = useState<ProjectInfo[]>([]);
+  const [selectedProject, setSelectedProject] = useState<ProjectDetails | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Fetch user projects
   useEffect(() => {
     const ownerEmail = localStorage.getItem("userEmail") || "";
     fetch(`${BASE_URL}/api/projects/projectInfo`, {
@@ -40,24 +67,13 @@ const Home = () => {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);              
-setProjectInfo(Array.isArray(data) ? data : []);
+        setProjectInfo(Array.isArray(data) ? data : []);
         setUpcomingTasks(Array.isArray(data.upcomingTaskDetails) ? data.upcomingTaskDetails : []);
       })
       .catch(err => console.error("Error fetching project info:", err));
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    const animation = setInterval(() => {
-      setAnimatedValue(prev => (prev + 1) % 100);
-    }, 50);
-    return () => {
-      clearInterval(timer);
-      clearInterval(animation);
-    };
-  }, []);
-
+  // Fetch user stats
   useEffect(() => {
     const email = localStorage.getItem("userEmail") || "";
     fetch(`${BASE_URL}/api/projects/getMyStats`, {
@@ -73,6 +89,28 @@ setProjectInfo(Array.isArray(data) ? data : []);
       .catch(err => console.error("Error fetching stats:", err));
   }, []);
 
+  // Clock and animation
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    const animation = setInterval(() => setAnimatedValue(prev => (prev + 1) % 100), 50);
+    return () => {
+      clearInterval(timer);
+      clearInterval(animation);
+    };
+  }, []);
+
+  const handleViewProject = async (projectId: string) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/projects/${projectId}`);
+      if (!res.ok) throw new Error("Project not found");
+      const project = await res.json();
+      setSelectedProject(project);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching project details:", error);
+    }
+  };
+
   const quickActions = [
     { label: 'Add Task', icon: Plus, color: 'bg-gradient-to-r from-blue-500 to-blue-600' },
     { label: 'Timer', icon: Play, color: 'bg-gradient-to-r from-green-500 to-green-600' },
@@ -83,13 +121,12 @@ setProjectInfo(Array.isArray(data) ? data : []);
   const upcomingDeadlines = upcomingTasks.map(task => ({
     task: task.title,
     due: task.localDate,
-    urgent: false, // Add your own urgency logic if needed
+    urgent: false,
   }));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-3 sm:p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
-
         {/* Greeting */}
         <div className="mb-4 sm:mb-6 lg:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -110,7 +147,7 @@ setProjectInfo(Array.isArray(data) ? data : []);
           </div>
         </div>
 
-        {/* Quick Stats - dynamic only */}
+        {/* Quick Stats */}
         {completedTasks !== null && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6 lg:mb-8">
             <div className="group relative overflow-hidden bg-white rounded-xl shadow-lg">
@@ -184,22 +221,39 @@ setProjectInfo(Array.isArray(data) ? data : []);
               <p>No project info available</p>
             ) : (
               projectInfo.map(project => (
-          <div key={project.id} className="mb-4 border-b pb-2 relative">
-            <h2 className="text-lg font-semibold">{project.name}</h2>
-            <p className="text-sm text-gray-600">Status: {project.status}</p>
-            <p className="text-sm">{project.description}</p>
-            <button
-              className="absolute top-0 right-0 mt-2 mr-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
-              onClick={() => window.location.href = `/views/project/${project.id}`}
-            >
-              View Project
-            </button>
-          </div>
+                <div key={project.id} className="mb-4 border-b pb-2 relative">
+                  <h2 className="text-lg font-semibold">{project.name}</h2>
+                  <p className="text-sm text-gray-600">Status: {project.status}</p>
+                  <p className="text-sm">{project.description}</p>
+                  <button
+                    className="absolute top-0 right-0 mt-2 mr-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+                    onClick={() => handleViewProject(project.id)}
+                  >
+                    View Project
+                  </button>
+                </div>
               ))
             )}
           </div>
         </div>
       </div>
+
+      {/* Modal for Project Details */}
+      {isModalOpen && selectedProject && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <X />
+            </button>
+            <h2 className="text-xl font-bold mb-2">{selectedProject.projectName}</h2>
+            <p className="text-sm text-gray-600 mb-2">Status: {selectedProject.projectStatus}</p>
+            <p className="text-sm">{selectedProject.projectDescription}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
