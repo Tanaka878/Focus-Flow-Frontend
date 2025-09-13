@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Zap, CheckCircle2, FileText, Play, Plus, X } from 'lucide-react';
+import { Clock, Zap, CheckCircle2, X } from 'lucide-react';
 import BASE_URL from '../utils/api';
 import ProjectInfo from '../Interfaces/ProjectInfo';
+import Image from 'next/image';
 
 interface UpcomingTaskDetails {
   title: string;
@@ -14,7 +15,7 @@ interface ProjectDetails {
   projectName: string;
   projectDescription: string;
   author: string;
-  projectTimeline?: Record<string, string>; // key: string, value: ISO date string
+  projectTimeline?: Record<string, string>; 
   projectStatus: 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED' | 'ARCHIVED';
   members?: {
     memberId: string;
@@ -112,10 +113,10 @@ const Home = () => {
   };
 
   const quickActions = [
-    { label: 'Add Task', icon: Plus, color: 'bg-gradient-to-r from-blue-500 to-blue-600' },
-    { label: 'Timer', icon: Play, color: 'bg-gradient-to-r from-green-500 to-green-600' },
-    { label: 'Note', icon: FileText, color: 'bg-gradient-to-r from-purple-500 to-purple-600' },
-    { label: 'Schedule', icon: Calendar, color: 'bg-gradient-to-r from-orange-500 to-orange-600' }
+    { label: 'Add Task', icon: '/Image/new-project.png', color: 'bg-blue-500' },
+    { label: 'Timer', icon: '/Image/pencil.png', color: 'bg-green-500' },
+    { label: 'Note', icon: '/Image/new-project.png', color: 'bg-gray-700' },
+    { label: 'Schedule', icon: '/Image/new-project.png', color: 'bg-indigo-600' }
   ];
 
   const upcomingDeadlines = upcomingTasks.map(task => ({
@@ -174,14 +175,13 @@ const Home = () => {
               </h2>
               <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {quickActions.map((action, index) => {
-                  const Icon = action.icon;
                   return (
                     <button
                       key={index}
                       className={`${action.color} hover:scale-105 text-white p-3 rounded-lg transition-all duration-200 flex flex-col items-center gap-2`}
                       onClick={() => QuickAction(action.label)}
                     >
-                      <Icon className="w-5 h-5" />
+                      <Image src={action.icon} alt={'icon'} width={50} height={50}/>
                       <span className="text-xs font-medium">{action.label}</span>
                     </button>
                   );
