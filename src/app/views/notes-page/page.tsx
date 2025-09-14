@@ -15,7 +15,14 @@ const MyNotesPage: React.FC = () => {
 
   const [newNote, setNewNote] = useState("");
 
-  const ownerEmail = localStorage.getItem("userEmail") || "";
+  const [ownerEmail, setOwnerEmail] = useState("");
+
+  //making sure that it run only on client side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setOwnerEmail(localStorage.getItem("userEmail") || "");
+    }
+  }, []);
 
   // Fetch notes from backend
   const fetchMyNotes = async () => {
