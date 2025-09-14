@@ -41,7 +41,7 @@ function QuickAction(label: string) {
       window.location.href = '/views/manual-creation/';
       break;
     case 'Timer':
-      window.location.href = '/Views/Timer/';
+      window.location.href = '/views/scheduler/';
       break;
     case 'Note':
       window.location.href = '/views/notes-page/';
